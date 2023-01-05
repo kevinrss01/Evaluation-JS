@@ -52,10 +52,12 @@ h1{
 }
 
 .cardContainer{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
   width: 30%;
   margin: 20px;
-  display: flex;
-  flex-direction: column;
   height: 300Px;
   border-radius: 10px;
   overflow: hidden;
@@ -65,8 +67,22 @@ h1{
   transition: background-size 0.5s ease-out;
 }
 
+.cardContainer .moreContent{
+  width: 100%;
+  background-color: white;
+  height:25px;
+  padding: 5px;
+  font-size: 20px;
+  margin-left: 1000px;
+  transition: margin-left 0.4s ease-out;
+}
+
 .cardContainer:hover{
   background-size: 110%;
+}
+
+.cardContainer:hover > .moreContent{
+  margin-left: 0px;
 }
 
 .cardContainer p.name {
@@ -77,10 +93,54 @@ h1{
   font-size: 20px;
   color: black;
   width: 100%;
-  background-color: aliceblue;
+  background-color: dodgerblue;
 }
 
 .cardContainer img{
   width: 100%;
   height: auto;
+}
+
+.singlePageContainer {
+  height: 800px;
+  width: 100%;
+  display: flex;
+}
+
+.nameCharacterPage{
+  margin: 20px;
+  background-color: dodgerblue;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.singlePageContainer .imageContainer{
+  height: 100%;
+  width: 35%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imageContainer .imageCharacterPage{
+  width: 400px;
+  height: 400px;
+  background-size: cover;
+  border-radius: 20px;
+}
+
+.nameCharacterPage{
+  margin-left: 25%;
+}
+
+.infoContainer{
+  width: 65%;
+  padding: 15px;
+}
+
+.characterInfo{
+  padding: 20px;
+  font-size: 25px;
 }

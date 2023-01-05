@@ -27,4 +27,40 @@ const callApi = async () => {
   }
 };
 
+//Redemander à ChatGPT de me créer la requête, mais avec l'adresse API de base
+const callApiCharacterPage = async (name) => {
+  const query = `
+  query {
+  characters (filter: {name: "Too Cute to Murder Morty"}){
+    info {
+      count
+    }
+    results {
+      name
+      id
+    }
+  }
+  location(id: 1) {
+    name
+    id
+    residents {
+      id
+    }
+  }
+  episodesByIds(ids: [1, 2]) {
+    id
+  }
+}
+`;
+
+  const res = await fetch("https://rickandmortyapi.com/api/character", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+  });
+  console.log(await res.json());
+};
+
+await callApiCharacterPage();
+
 export default callApi;
