@@ -1,20 +1,13 @@
-/*class ApiClient {
-  constructor(){
-    this.baseUrl = "https://rickandmortyapi.com/api";
-    this.characterUrl = "/character";
-    this.locationUrl = "/location";
-    this.episodeUrl = "/episode";
-    this.graphQLUrl = "https://rickandmortyapi.graphcdn.app/";
+export class ApiClient {
+  constructor() {
+    this.baseUrlApi = "https://rickandmortyapi.com/api";
+    this.baseUrlGraphQL = "https://rickandmortyapi.com/graphql";
   }
 
-}
-
-export default ApiClient;*/
-
-const callApi = async () => {
-  const personnages = [];
-  try {
-    const query = `
+  async callApi() {
+    const personnages = [];
+    try {
+      const query = `
       query getCharacters {
       characters {
         results {
@@ -38,24 +31,24 @@ const callApi = async () => {
       }
     }`;
 
-    const res = await fetch("https://rickandmortyapi.com/graphql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
-    });
-    const result = await res.json();
-    result.data.characters.results.map((element) => {
-      personnages.push(element);
-    });
-    return personnages;
-  } catch (error) {
-    throw new Error(error);
+      const res = await fetch(this.baseUrlGraphQL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      const result = await res.json();
+      result.data.characters.results.map((element) => {
+        personnages.push(element);
+      });
+      return personnages;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
-};
 
-export const callApiCharacterPage = async (name, dimensionId) => {
-  try {
-    const query = `
+  async callApiCharacterPage(name, dimensionId) {
+    try {
+      const query = `
       query {
       characters (filter: {name: "${name}"} ) {
         info {
@@ -74,31 +67,39 @@ export const callApiCharacterPage = async (name, dimensionId) => {
     }
     `;
 
-    const res = await fetch("https://rickandmortyapi.com/graphql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
-    });
-    const response = await res.json();
-    return await response;
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-
-export const callApiFiltered = async (name, isAlive) => {
-  let character;
-  isAlive ? (isAlive = "alive") : (isAlive = "");
-  try {
-    async function fetchCharacters() {
-      const res = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${name}&status=${isAlive}`
-      );
-      character = await res.json();
+      const res = await fetch(this.baseUrlGraphQL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      const response = await res.json();
+      return await response;
+    } catch (e) {
+      throw new Error(e);
     }
-    await fetchCharacters();
-    return character.results;
-  } catch (error) {}
-};
+  }
 
-export default callApi;
+  async callApiFiltered(name, isAlive) {
+    let character;
+    let url;
+    const urlAlive = `${this.baseUrlApi}/character/?name=${name}&status=alive`;
+    const urlDead = `${this.baseUrlApi}/character/?name=${name}`;
+    if (isAlive) {
+      url = urlAlive;
+    } else {
+      url = urlDead;
+    }
+
+    try {
+      async function fetchCharacters() {
+        const res = await fetch(url);
+        character = await res.json();
+      }
+      await fetchCharacters();
+      console.log(character);
+      return character.results;
+    } catch (error) {
+      console.error("no data found");
+    }
+  }
+}

@@ -1,10 +1,9 @@
 import createElements, { createChild } from "./createElement.js";
-import { callApiCharacterPage } from "./callapi.js";
+import { ApiClient } from "./callapi.js";
 
 const app = document.querySelector("#app");
-
+const apiClient = new ApiClient();
 const createSinglePageElement = async (data, id) => {
-  console.log(data);
   let objectWithId;
   data.forEach((element) => {
     if (element.id == id) {
@@ -35,7 +34,7 @@ const createSinglePageElement = async (data, id) => {
 
   //Call api to get all the residents of the planet
   if (objectWithId.location.dimension !== "unknown") {
-    const residents = await callApiCharacterPage(
+    const residents = await apiClient.callApiCharacterPage(
       `${objectWithId.name}`,
       objectWithId.location.id
     );

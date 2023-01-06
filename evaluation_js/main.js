@@ -1,7 +1,7 @@
-import callApi from "./javascript/callapi.js";
 import createElements from "./javascript/createElement.js";
-import { callApiFiltered } from "./javascript/callapi.js";
-let apiData = await callApi();
+import { ApiClient } from "./javascript/callapi.js";
+const apiClient = new ApiClient();
+let apiData = await apiClient.callApi();
 createElements(apiData);
 const app = document.querySelector("#app");
 
@@ -11,9 +11,11 @@ const filterDataWithSearchInput = async (input, data, isChecked) => {
     input = input.toLowerCase();
     //Filter every object in data to find only what includes the user search (input)
     if (isChecked) {
-      filteredData = await callApiFiltered(input, true);
+      filteredData = await apiClient.callApiFiltered(input, true);
+      console.log(filteredData);
     } else {
-      filteredData = await callApiFiltered(input, false);
+      filteredData = await apiClient.callApiFiltered(input, false);
+      console.log(filteredData);
     }
     console.log(filteredData);
     if (!filteredData) {
@@ -48,9 +50,14 @@ searchButton.addEventListener("click", async function () {
 });
 
 //On enter
-searchInput.addEventListener("keypress", function (e) {
+searchInput.addEventListener("keypress", async function (e) {
+  console.log(isAliveButton.checked);
   if (e.key === "Enter") {
-    filterDataWithSearchInput(searchInput.value, apiData);
+    await filterDataWithSearchInput(
+      searchInput.value,
+      apiData,
+      isAliveButton.checked
+    );
   }
 });
 
