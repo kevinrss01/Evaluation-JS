@@ -27,6 +27,7 @@ export const createChild = (
 
 //For HomePage
 const createElements = (data) => {
+  console.log(data);
   if (data) {
     const app = document.querySelector("#app");
 
@@ -36,12 +37,13 @@ const createElements = (data) => {
       container.className = `cardContainer`;
       container.setAttribute("data", `${element.id}`);
       container.style.backgroundImage = `url("${element.image}")`;
-      container.addEventListener("click", () => {
+      container.addEventListener("click", async () => {
         const id = container.getAttribute("data");
         //Hide search input in character Page
         const searchDiv = document.querySelector(".search");
         searchDiv.style.display = "none";
-        createSinglePageElement(data, id);
+        console.log(data);
+        await createSinglePageElement(data, id);
       });
 
       //Name

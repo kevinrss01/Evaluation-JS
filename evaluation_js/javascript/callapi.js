@@ -1,3 +1,16 @@
+/*class ApiClient {
+  constructor(){
+    this.baseUrl = "https://rickandmortyapi.com/api";
+    this.characterUrl = "/character";
+    this.locationUrl = "/location";
+    this.episodeUrl = "/episode";
+    this.graphQLUrl = "https://rickandmortyapi.graphcdn.app/";
+  }
+
+}
+
+export default ApiClient;*/
+
 const callApi = async () => {
   const personnages = [];
   try {
@@ -71,6 +84,21 @@ export const callApiCharacterPage = async (name, dimensionId) => {
   } catch (e) {
     throw new Error(e);
   }
+};
+
+export const callApiFiltered = async (name, isAlive) => {
+  let character;
+  isAlive ? (isAlive = "alive") : (isAlive = "");
+  try {
+    async function fetchCharacters() {
+      const res = await fetch(
+        `https://rickandmortyapi.com/api/character/?name=${name}&status=${isAlive}`
+      );
+      character = await res.json();
+    }
+    await fetchCharacters();
+    return character.results;
+  } catch (error) {}
 };
 
 export default callApi;

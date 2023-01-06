@@ -1,26 +1,29 @@
 import callApi from "./javascript/callapi.js";
 import createElements from "./javascript/createElement.js";
-import createSinglePageElement from "./javascript/createSinglePageElement.js";
-
+import { callApiFiltered } from "./javascript/callapi.js";
 let apiData = await callApi();
+createElements(apiData);
 const app = document.querySelector("#app");
 
-createElements(apiData);
-
-const filterDataWithSearchInput = (input, data) => {
+const filterDataWithSearchInput = async (input, data, isChecked) => {
   if (input) {
-    input.toLowerCase();
+    let filteredData;
+    input = input.toLowerCase();
     //Filter every object in data to find only what includes the user search (input)
-    const filteredData = data.filter((object) =>
-      object.name.toLowerCase().includes(input)
-    );
-
-    if (filteredData.length === 0) {
+    if (isChecked) {
+      filteredData = await callApiFiltered(input, true);
+    } else {
+      filteredData = await callApiFiltered(input, false);
+    }
+    console.log(filteredData);
+    if (!filteredData) {
       app.innerHTML = "";
       const nothingFoundElement = document.createElement("h2");
-      nothingFoundElement.style.marginLeft = "25%";
-      nothingFoundElement.textContent =
-        "Nothing found 🥲, please search again.";
+      nothingFoundElement.className = "NothingFound";
+      nothingFoundElement.style.width = "100%";
+      nothingFoundElement.style.color = "white";
+      nothingFoundElement.style.textAlign = "center";
+      nothingFoundElement.textContent = "Rien n'a été trouvé.🥲";
       app.appendChild(nothingFoundElement);
     } else {
       app.innerHTML = "";
@@ -32,10 +35,16 @@ const filterDataWithSearchInput = (input, data) => {
 ///////SEARCH
 const searchInput = document.querySelector(".search input");
 const searchButton = document.querySelector(".search button");
+const isAliveButton = document.querySelector(".checkbox");
 
 //On click
-searchButton.addEventListener("click", function () {
-  filterDataWithSearchInput(searchInput.value, apiData);
+searchButton.addEventListener("click", async function () {
+  console.log(isAliveButton.checked);
+  await filterDataWithSearchInput(
+    searchInput.value,
+    apiData,
+    isAliveButton.checked
+  );
 });
 
 //On enter
@@ -45,7 +54,16 @@ searchInput.addEventListener("keypress", function (e) {
   }
 });
 
+//H1
 const appName = document.querySelector(".appName");
 appName.addEventListener("click", function () {
   window.location.reload();
+});
+
+//Search Button
+const searchButtonFirst = document.querySelector(".first-loup");
+searchButtonFirst.addEventListener("click", function () {
+  searchButtonFirst.style.display = "none";
+  const searchContainer = document.querySelector(".search");
+  searchContainer.style.display = "flex";
 });

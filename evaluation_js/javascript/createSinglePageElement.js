@@ -2,15 +2,16 @@ import createElements, { createChild } from "./createElement.js";
 import { callApiCharacterPage } from "./callapi.js";
 
 const app = document.querySelector("#app");
-const createSinglePageElement = async (data, id) => {
-  const loader = document.querySelector("#loader");
 
+const createSinglePageElement = async (data, id) => {
+  console.log(data);
   let objectWithId;
   data.forEach((element) => {
-    if (element.id === id) {
+    if (element.id == id) {
       objectWithId = element;
     }
   });
+  console.log(objectWithId);
   app.innerHTML = "";
 
   //Container
@@ -29,7 +30,7 @@ const createSinglePageElement = async (data, id) => {
     bottomContainer,
     "h2",
     "titleBottomContainer",
-    `Tous les résidents de la dimension de ${objectWithId.name}`
+    `Tous les résidents de la dimension de ${objectWithId.name} :`
   );
 
   //Call api to get all the residents of the planet
@@ -135,7 +136,6 @@ const createSinglePageElement = async (data, id) => {
   topContainer.appendChild(infoContainer);
 
   app.appendChild(singlePageContainer);
-  loader.style.display = "initial";
 };
 
 export default createSinglePageElement;
