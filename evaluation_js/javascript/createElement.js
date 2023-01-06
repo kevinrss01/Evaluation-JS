@@ -19,7 +19,6 @@ export const createChild = (
       text
         ? (newChildElement.textContent = text)
         : (newChildElement.textContent = "/");
-      attribut && newChildElement.setAttribute("src", attribut);
     }
 
     parentElement.appendChild(newChildElement);
@@ -39,11 +38,10 @@ const createElements = (data) => {
       container.style.backgroundImage = `url("${element.image}")`;
       container.addEventListener("click", () => {
         const id = container.getAttribute("data");
-        console.log("element clicked");
         //Hide search input in character Page
         const searchDiv = document.querySelector(".search");
         searchDiv.style.display = "none";
-        createSinglePageElement(data, parseInt(id));
+        createSinglePageElement(data, id);
       });
 
       //Name

@@ -1,66 +1,76 @@
 const callApi = async () => {
   const personnages = [];
-
-  let req;
   try {
-    req = await fetch("https://rickandmortyapi.com/api/character/715");
-    personnages.push(await req.json());
+    const query = `
+      query getCharacters {
+      characters {
+        results {
+          id
+          status
+          type
+          name
+          id
+          image
+          gender
+          species
+          origin{
+          id
+          dimension
+          }
+          location{
+            id
+            dimension
+          }
+        }
+      }
+    }`;
 
-    req = await fetch("https://rickandmortyapi.com/api/character/317");
-    personnages.push(await req.json());
-
-    req = await fetch("https://rickandmortyapi.com/api/character/325");
-    personnages.push(await req.json());
-
-    req = await fetch("https://rickandmortyapi.com/api/character/521");
-    personnages.push(await req.json());
-
-    req = await fetch("https://rickandmortyapi.com/api/character/535");
-    personnages.push(await req.json());
-
-    req = await fetch("https://rickandmortyapi.com/api/character/799");
-    personnages.push(await req.json());
-
+    const res = await fetch("https://rickandmortyapi.com/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+    const result = await res.json();
+    result.data.characters.results.map((element) => {
+      personnages.push(element);
+    });
     return personnages;
   } catch (error) {
     throw new Error(error);
   }
 };
 
-//Redemander à ChatGPT de me créer la requête, mais avec l'adresse API de base
-const callApiCharacterPage = async (name) => {
-  const query = `
-  query {
-  characters (filter: {name: "Too Cute to Murder Morty"}){
-    info {
-      count
+export const callApiCharacterPage = async (name, dimensionId) => {
+  try {
+    const query = `
+      query {
+      characters (filter: {name: "${name}"} ) {
+        info {
+          count
+        }
+      }
+      location(id: ${dimensionId}) {
+        name
+        id
+        residents {
+          id
+          name
+          image
+        }
+      }
     }
-    results {
-      name
-      id
-    }
-  }
-  location(id: 1) {
-    name
-    id
-    residents {
-      id
-    }
-  }
-  episodesByIds(ids: [1, 2]) {
-    id
-  }
-}
-`;
+    `;
 
-  const res = await fetch("https://rickandmortyapi.com/api/character", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query }),
-  });
-  console.log(await res.json());
+    const res = await fetch("https://rickandmortyapi.com/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+    const response = await res.json();
+    return await response;
+  } catch (e) {
+    throw new Error(e);
+  }
 };
-
-await callApiCharacterPage();
 
 export default callApi;

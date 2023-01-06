@@ -45,16 +45,7 @@ searchInput.addEventListener("keypress", function (e) {
   }
 });
 
-//Going to Character page
-
-/*const allCard = document.querySelectorAll(".cardContainer");
-allCard.forEach((card) => {
-  card.addEventListener("click", () => {
-    const id = card.getAttribute("data");
-    console.log("element clicked");
-    //Hide search input in character Page
-    const searchDiv = document.querySelector(".search");
-    searchDiv.style.display = "none";
-    createSinglePageElement(apiData, parseInt(id));
-  });
-});*/
+const appName = document.querySelector(".appName");
+appName.addEventListener("click", function () {
+  window.location.reload();
+});
