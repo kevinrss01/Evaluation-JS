@@ -26,7 +26,7 @@
 
 ## Start the project :
 Make sur you have NodeJs installed in your computer.
-- Clone the project with `git init https://github.com/kevinrss01/Evaluation-JS`
+- Clone the project with `git clone https://github.com/kevinrss01/Evaluation-JS`
 - Check that you are well in the good repository and Run `npm install`
 - Start `npm run dev`
 - Enjoy.
